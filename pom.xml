@@ -97,7 +97,7 @@
                    for compatibility with source maps -->
               <sourceFilesCopied>true</sourceFilesCopied>
 
-              <!-- Optimization level. Valid values are: SIMPLE, ADVANCED, FULL -->
+              <!-- Optimization level. Valid values are: SIMPLE, ADVANCED, FULLL -->
               <optimizationLevel>ADVANCED</optimizationLevel>
             </configuration>
           </execution>
