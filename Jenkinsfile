@@ -1,18 +1,10 @@
 pipeline {
   agent {label 'label11'}
-
 stages {
-
-stage('build') {
+stage('git-checkout') {
   steps {
-         echo "building----"
-             }
-            }
-
-stage('test') {
-  steps {
-         echo "testing-----"
-             }
-                     }
+git 'https://github.com/vijay2181/maven-war-project1.git'
+}
+}
 }
 }
