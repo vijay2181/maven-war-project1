@@ -2,7 +2,7 @@ pipeline {
   agent {label 'label11'}
 stages {
 
-  stage('git-checkout') {
+  stage('git-checkout') {    //this is a sample commit
   steps {
 git 'https://github.com/vijay2181/maven-war-project1.git'
            }
