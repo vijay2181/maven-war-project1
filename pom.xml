@@ -38,6 +38,14 @@
       <scope>provided</scope>
       </dependency>
       
+      <!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+<dependency>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.5.5.201112152213</version>
+</dependency>
+
+      
   </dependencies>
     
   
