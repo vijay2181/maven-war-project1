@@ -27,7 +27,27 @@ git 'https://github.com/vijay2181/maven-war-project1.git'
 
              }
   
+  stage('Code Coverage') {
+
+   when {environment name: 'BUILD', value: 'yes'}
+  steps {
+     echo "Running Code Coverage ..." 
+	   sh "mvn  org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+	 }
+                  }
+ 
+  stage('SonarQube Analysis')                     
+  {
+    when {environment name: 'BUILD', value: 'yes'}
+    steps{
+     withSonarQubeEnv('demosonarqube') {                                     //demosonarqube is name of sonarqube dashboard given in sonarqube servers
+	  
+         sh 'mvn sonar:sonar'                                                   //it will call static code analysis and capture the details
+	  }
+    }
+  }
   
   
 }
+ 
 }
