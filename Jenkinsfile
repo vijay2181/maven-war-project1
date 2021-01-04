@@ -2,7 +2,7 @@ pipeline {
   agent {label 'label11'}
 stages {
 
-  stage('git-checkout') {    //this is a sample commit
+  stage('git-checkout') {
   steps {
 git 'https://github.com/vijay2181/maven-war-project1.git'
            }
@@ -24,42 +24,53 @@ git 'https://github.com/vijay2181/maven-war-project1.git'
                echo "Building artifacts ..."
                sh "mvn clean package "
                }
-
-             }
-  
-  stage('Code Coverage') {
+               }
+stage('Code Coverage') {
 
    when {environment name: 'BUILD', value: 'yes'}
   steps {
      echo "Running Code Coverage ..." 
-	   sh "mvn  org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+	   
 	 }
                   }
- 
-  stage('SonarQube Analysis')                     
+	
+	stage('SonarQube Analysis')                     
   {
     when {environment name: 'BUILD', value: 'yes'}
     steps{
-     withSonarQubeEnv('demosonarqube') {                                     //demosonarqube is name of sonarqube dashboard given in sonarqube servers
-	  
-         sh 'mvn sonar:sonar'                                                   //it will call static code analysis and capture the details
+     
+         echo 'code analysis'                                                  //it will call static code analysis and capture the details
 	  }
     }
-  }
+	
   
-  stage("Quality Gate"){ 
+stage("Quality Gate"){ 
     when {environment name: 'BUILD', value: 'yes'}
     steps{
-	 script {
-	  timeout(time: 10, unit: 'MINUTES') {                 // Just in case something goes wrong, pipeline will be killed after a timeout
-        def qg = waitForQualityGate()                                      // Reuse taskId previously collected by withSonarQubeEnv
-        if (qg.status != 'OK') {
-           error "Pipeline aborted due to quality gate failure: ${qg.status}"
-        }
-      }
-	 }                                                                          //qg is a dummy variable
+	    echo 'quality gates'}
 }
- 
-}
+	
+	
+	stage('Stage Artifacts') 
+  {          
+  
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {          
+    script { 
+	    /* Define the Artifactory Server details */
+        def server = Artifactory.server 'jfrog'                       //Artifactory.server is a fuction got by installing artifactory plugin
+        def uploadSpec = """{
+            "files": [{
+                "pattern": "samplewar/target/samplewar.war",                                  
+                "target": "demoCICD"                                                        
+            }]
+        }"""                                                                                                //demoCICD is the repository name in jfrog
+        
+        /* Upload the war to  Artifactory repo */
+        server.upload(uploadSpec)
+    }
+   }
+  }
+	
 }
 }
