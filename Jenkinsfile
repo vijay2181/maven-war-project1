@@ -61,7 +61,7 @@ stage("Quality Gate"){
         def server = Artifactory.server 'jfrog'                       //Artifactory.server is a fuction got by installing artifactory plugin
         def uploadSpec = """{
             "files": [{
-                "pattern": "./target/samplewar.war",                                  
+                "pattern": "target/project-3-1.0-SNAPSHOT.war",                                  
                 "target": "demoCICD"                                                        
             }]
         }"""                                                                                                //demoCICD is the repository name in jfrog
