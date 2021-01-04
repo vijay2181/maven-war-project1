@@ -54,7 +54,7 @@ stage("Quality Gate"){
 	stage('Stage Artifacts') 
   {          
   
-   when {environment name: 'BUILDME', value: 'yes'}
+   when {environment name: 'BUILD', value: 'yes'}
    steps {          
     script { 
 	    /* Define the Artifactory Server details */
