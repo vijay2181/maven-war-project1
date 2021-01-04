@@ -62,15 +62,64 @@ stage("Quality Gate"){
         def uploadSpec = """{
             "files": [{
                 "pattern": "target/project-3-1.0-SNAPSHOT.war",                                  
-                "target": "demoCICD"                                                        
+                "target": "demoCICD"    
+                                                       
             }]
         }"""                                                                                                //demoCICD is the repository name in jfrog
-        
+                           //if you want you can also give       "recursive": "false"       below target
+         
         /* Upload the war to  Artifactory repo */
         server.upload(uploadSpec)
     }
    }
   }
 	
+
+stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    buildName: test-pipeline-12,
+                    buildNumber: 1,
+                    serverId: jfrog
+                )
+
+                rtPublishBuildInfo (
+                    buildName: test-pipeline-12,
+                    buildNumber: 1,
+                    serverId: jfrog
+                )
+            }
+        }
+         stage ('Add interactive promotion') {
+            steps {
+                rtAddInteractivePromotion (
+                    //Mandatory parameter
+                    serverId: jfrog,
+
+                    //Optional parameters
+                    targetRepo: 'demoCICD',
+                    displayName: 'Promote me please',
+                    buildName: TEST-PIPELINE-12,
+                    buildNumber: 1,
+                    comment: 'this is the promotion comment',
+                    sourceRepo: 'result/',
+                    status: 'Released',
+                    includeDependencies: true,
+                    failFast: true,
+                    copy: true
+                )
+
+                rtAddInteractivePromotion (
+                    serverId: jfrog,
+                    buildName: test-pipeline-12,
+                    buildNumber: 1
+                )
+            }
+         }
+
+
+
+
+
 }
 }
