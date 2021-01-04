@@ -75,18 +75,18 @@ stage("Quality Gate"){
   }
 	
 
-stage ('Publish build info') {
+ stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
-                    buildName: test-pipeline-12,
-                    buildNumber: 1,
-                    serverId: jfrog
+                    buildName: JOB_NAME,
+                    buildNumber: BUILD_NUMBER,
+                    serverId: SERVER_ID
                 )
 
                 rtPublishBuildInfo (
-                    buildName: test-pipeline-12,
-                    buildNumber: 1,
-                    serverId: jfrog
+                    buildName: JOB_NAME,
+                    buildNumber: BUILD_NUMBER,
+                    serverId: SERVER_ID
                 )
             }
         }
@@ -94,13 +94,13 @@ stage ('Publish build info') {
             steps {
                 rtAddInteractivePromotion (
                     //Mandatory parameter
-                    serverId: jfrog,
+                    serverId: SERVER_ID,
 
                     //Optional parameters
-                    targetRepo: 'demoCICD',
+                    targetRepo: 'result/',
                     displayName: 'Promote me please',
-                    buildName: TEST-PIPELINE-12,
-                    buildNumber: 1,
+                    buildName: JOB_NAME,
+                    buildNumber: BUILD_NUMBER,
                     comment: 'this is the promotion comment',
                     sourceRepo: 'result/',
                     status: 'Released',
@@ -110,16 +110,18 @@ stage ('Publish build info') {
                 )
 
                 rtAddInteractivePromotion (
-                    serverId: jfrog,
-                    buildName: test-pipeline-12,
-                    buildNumber: 1
+                    serverId: SERVER_ID,
+                    buildName: JOB_NAME,
+                    buildNumber: BUILD_NUMBER
                 )
             }
          }
-
-
-
-
-
-}
+         stage ('Removing files') {
+            steps {
+                sh 'rm -rf $WORKSPACE/*'
+            }
+        }
+         
+        
+  }
 }
